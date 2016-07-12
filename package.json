@@ -1,0 +1,25 @@
+{
+  "name": "react-tutorial-server",
+  "version": "1.0.0",
+  "description": "Server level code from React Tutorial",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xqjason/react-tutorial-server.git"
+  },
+  "keywords": [
+    "react",
+    "tutorial",
+    "sample"
+  ],
+  "author": "Jason Xu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xqjason/react-tutorial-server/issues"
+  },
+  "homepage": "https://github.com/xqjason/react-tutorial-server#readme"
+}
