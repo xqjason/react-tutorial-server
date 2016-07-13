@@ -67,6 +67,17 @@ app.get('/form/FormFields', Auth, function(req, res) {
 
 });
 
+app.get('/form/FormFieldsNoAuth', function(req, res) {
+  fs.readFile(FORMFIELDS_FILE, function(err, data) {
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  }
+  res.json(JSON.parse(data));
+  });
+
+});
+
 app.post('/api/comments', function(req, res) {
   fs.readFile(COMMENTS_FILE, function(err, data) {
     if (err) {
