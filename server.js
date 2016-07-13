@@ -17,6 +17,7 @@ var bodyParser = require('body-parser');
 var app = express();
 
 var COMMENTS_FILE = path.join(__dirname, 'comments.json');
+var FORMFIELDS_FILE = path.join(__dirname, 'formFields.json');
 
 app.set('port', (process.env.PORT || 3000));
 
@@ -37,6 +38,16 @@ app.use(function(req, res, next) {
 
 app.get('/api/comments', function(req, res) {
   fs.readFile(COMMENTS_FILE, function(err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    res.json(JSON.parse(data));
+  });
+});
+
+app.get('/form/FormFields', function(req, res) {
+  fs.readFile(FORMFIELDS_FILE, function(err, data) {
     if (err) {
       console.error(err);
       process.exit(1);
