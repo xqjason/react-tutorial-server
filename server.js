@@ -17,7 +17,7 @@ var bodyParser = require('body-parser');
 var app = express();
 
 var COMMENTS_FILE = path.join(__dirname, 'comments.json');
-var FORMFIELDS_FILE = path.join(__dirname, 'formFields.json');
+var FORMFIELDS_FILE = path.join(__dirname, 'formField.json');
 
 app.set('port', (process.env.PORT || 3000));
 
