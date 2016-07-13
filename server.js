@@ -13,8 +13,13 @@
 var fs = require('fs');
 var path = require('path');
 var express = require('express');
-var bodyParser = require('body-parser');
 var app = express();
+var bodyParser = require('body-parser');
+var jsforce = require('jsforce');
+var session = require('express-session');
+var User = require("./model/User.js");
+
+
 
 var COMMENTS_FILE = path.join(__dirname, 'comments.json');
 var FORMFIELDS_FILE = path.join(__dirname, 'formField.json');
@@ -24,6 +29,11 @@ app.set('port', (process.env.PORT || 3000));
 app.use('/', express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(session(({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false
+})));
 
 // Additional middleware which will set headers that we need on each request.
 app.use(function(req, res, next) {
@@ -46,14 +56,15 @@ app.get('/api/comments', function(req, res) {
   });
 });
 
-app.get('/form/FormFields', function(req, res) {
+app.get('/form/FormFields', Auth, function(req, res) {
   fs.readFile(FORMFIELDS_FILE, function(err, data) {
-    if (err) {
-      console.error(err);
-      process.exit(1);
-    }
-    res.json(JSON.parse(data));
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  }
+  res.json(JSON.parse(data));
   });
+
 });
 
 app.post('/api/comments', function(req, res) {
@@ -82,6 +93,37 @@ app.post('/api/comments', function(req, res) {
   });
 });
 
+function Auth (req, res, next) {
+  if(req.session.user){
+    next();
+  }else{
+    console.log("Auth");
+    res.status(401).send({
+      flash : 'Please log in first'
+    });
+  }
+}
+
+//Log user in
+app.post('/session/login', function(req, res) {
+  var email = req.body.email;
+  var password = req.body.password;
+
+  if ( null == email || email.length < 1
+      || null == password || password.length < 1 ) {
+    res.status(401).send("Wrong username or password");
+    return;
+  }
+
+  if (email == "jd@test.com" && password == "abc123") {
+    req.session.user = new User();
+      return res.status(200).send({
+        auth : true
+      });
+    }else{
+      return res.status(401).send("Wrong username or password");
+    }
+});
 
 app.listen(app.get('port'), function() {
   console.log('Server started: http://localhost:' + app.get('port') + '/');
