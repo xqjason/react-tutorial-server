@@ -127,7 +127,7 @@ app.post('/session/login', function(req, res) {
   }
 
   if (email == "jd@test.com" && password == "abc123") {
-    req.session.user = new User();
+    req.session.user = new User(email, passowrd);
       return res.status(200).send({
         auth : true
       });

@@ -1,6 +1,6 @@
-var User = function () {  
-    this.email = "jd@test.com";
-    this.password = "abc123"
+var User = function (email, password) {  
+    this.email = email;
+    this.password = password;
 }
 
 module.exports = User;
