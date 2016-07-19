@@ -138,6 +138,17 @@ app.post('/session/login', function(req, res) {
     }
 });
 
+app.delete('/session/logout', function (req, res) {
+  //Sending new csrf to client when user logged out
+  //for next user to sign in without refreshing the page
+  req.session.user = null;
+  //req.session._csrf = uid(24);
+  //must send the status code in order to kick the procedures in .done
+  res.status(200).send({
+    csrf : req.csrfToken()
+  });
+});
+
 app.listen(app.get('port'), function() {
   console.log('Server started: http://localhost:' + app.get('port') + '/');
 });
