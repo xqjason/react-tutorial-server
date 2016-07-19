@@ -127,8 +127,12 @@ app.post('/session/login', function(req, res) {
   }
 
   if (email == "jd@test.com" && password == "abc123") {
+<<<<<<< HEAD
     var user = new User();
     req.session.user = user
+=======
+    req.session.user = new User(email, password);
+>>>>>>> f435014dddd8e5cff7eae3a7f224164e91196b97
       return res.status(200).send({
         auth : true,
         user : user
