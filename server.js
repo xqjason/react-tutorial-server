@@ -145,7 +145,7 @@ app.delete('/session/logout', function (req, res) {
   //req.session._csrf = uid(24);
   //must send the status code in order to kick the procedures in .done
   res.status(200).send({
-    csrf : req.csrfToken()
+    logout : "success"
   });
 });
 
