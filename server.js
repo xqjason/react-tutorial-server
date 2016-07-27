@@ -14,13 +14,13 @@ var fs = require('fs');
 var path = require('path');
 var express = require('express');
 var app = express();
+var apiRoutes = express.Router(); 
 var bodyParser = require('body-parser');
 var jsforce = require('jsforce');
 var session = require('express-session');
 var jwt    = require('jsonwebtoken');
 var User = require("./model/User.js");
 var config = require("./config/config.js");
-
 
 
 var COMMENTS_FILE = path.join(__dirname, 'comments.json');
@@ -63,6 +63,7 @@ app.get('/form/FormFields', Auth, function(req, res) {
   /*res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "*");
   res.header("Access-Control-Allow-Headers", "*");*/
+
   fs.readFile(FORMFIELDS_FILE, function(err, data) {
   if (err) {
     console.error(err);
@@ -114,15 +115,26 @@ function Auth (req, res, next) {
   /*res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "*");
   res.header("Access-Control-Allow-Headers", "*");*/
-  if(req.session.user){
-    next();
+  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+  if(token){
+
+    jwt.verify(token, app.get('superSecret'), function(err, decoded) {      
+      if (err) {
+        return res.json({ success: false, message: 'Failed to authenticate token.' });    
+      } else {
+        // if everything is good, save to request for use in other routes
+        req.decoded = decoded;    
+        next();
+      }
+    });
   }else{
-    console.log("Auth");
+    console.log("Auth failed");
     res.status(401).send({
-      flash : 'Please log in first'
+      message : 'Please log in first'
     });
   }
-}
+};
 
 //Log user in
 app.post('/session/login', function(req, res) {
@@ -140,12 +152,9 @@ app.post('/session/login', function(req, res) {
     var token = jwt.sign(user, app.get('superSecret'), {
           expiresIn: 60 * 60 // expires in 24 hours
         });     
-    req.session.user = user;
-
     /*res.redirect('/form/FormFields');*/
       return res.status(200).send({
         auth : true,
-        user : user,
         token : token
       });
     }else{
