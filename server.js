@@ -17,13 +17,16 @@ var app = express();
 var bodyParser = require('body-parser');
 var jsforce = require('jsforce');
 var session = require('express-session');
+var jwt    = require('jsonwebtoken');
 var User = require("./model/User.js");
+var config = require("./config/config.js");
 
 
 
 var COMMENTS_FILE = path.join(__dirname, 'comments.json');
 var FORMFIELDS_FILE = path.join(__dirname, 'formField.json');
 
+app.set('superSecret', config.secret)
 app.set('port', (process.env.PORT || 3000));
 
 app.use('/', express.static(path.join(__dirname, 'public')));
@@ -127,11 +130,17 @@ app.post('/session/login', function(req, res) {
   }
 
   if (email == "jd@test.com" && password == "abc123") {
-    var user = new User(email, password);    
+    var user = new User(email, password);
+    var token = jwt.sign(user, app.get('superSecret'), {
+          expiresInMinutes: 1440 // expires in 24 hours
+        });     
     req.session.user = user;
+
+    /*res.redirect('/form/FormFields');*/
       return res.status(200).send({
         auth : true,
-        user : user
+        user : user,
+        token : token
       });
     }else{
       return res.status(401).send("Wrong username or password");

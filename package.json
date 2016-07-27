@@ -8,10 +8,11 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "jsforce": "~x.x",
     "body-parser": "^1.4.3",
     "express": "^4.4.5",
-    "express-session": ">= 0.0.1"
+    "express-session": ">= 0.0.1",
+    "jsforce": "~x.x",
+    "jsonwebtoken": "^7.1.6"
   },
   "devDependencies": {},
   "repository": {
