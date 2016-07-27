@@ -60,9 +60,9 @@ app.get('/api/comments', function(req, res) {
 });
 
 app.get('/form/FormFields', Auth, function(req, res) {
-  res.header("Access-Control-Allow-Origin", "*");
+  /*res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "*");
-  res.header("Access-Control-Allow-Headers", "*");
+  res.header("Access-Control-Allow-Headers", "*");*/
   fs.readFile(FORMFIELDS_FILE, function(err, data) {
   if (err) {
     console.error(err);
@@ -111,9 +111,9 @@ app.post('/api/comments', function(req, res) {
 });
 
 function Auth (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+  /*res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "*");
-  res.header("Access-Control-Allow-Headers", "*");
+  res.header("Access-Control-Allow-Headers", "*");*/
   if(req.session.user){
     next();
   }else{
