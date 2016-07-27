@@ -138,7 +138,7 @@ app.post('/session/login', function(req, res) {
   if (email == "jd@test.com" && password == "abc123") {
     var user = new User(email, password);
     var token = jwt.sign(user, app.get('superSecret'), {
-          expiresInMinutes: 1440 // expires in 24 hours
+          expiresIn: 60 * 60 // expires in 24 hours
         });     
     req.session.user = user;
 
