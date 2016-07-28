@@ -155,7 +155,8 @@ app.post('/session/login', function(req, res) {
     /*res.redirect('/form/FormFields');*/
       return res.status(200).send({
         auth : true,
-        token : token
+        token : token,
+        username : user.email
       });
     }else{
       return res.status(401).send("Wrong username or password");
