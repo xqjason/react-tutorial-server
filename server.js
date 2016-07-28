@@ -19,6 +19,7 @@ var bodyParser = require('body-parser');
 var jsforce = require('jsforce');
 var session = require('express-session');
 var jwt    = require('jsonwebtoken');
+var cookie = require('react-cookie');
 var User = require("./model/User.js");
 var config = require("./config/config.js");
 
@@ -115,7 +116,7 @@ function Auth (req, res, next) {
   /*res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "*");
   res.header("Access-Control-Allow-Headers", "*");*/
-  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  var token = cookie.load('token') || req.body.token || req.query.token || req.headers['x-access-token'];
 
   if(token){
 
